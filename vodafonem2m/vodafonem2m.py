@@ -7,7 +7,7 @@
 from datetime import datetime
 
 import requests
-
+import base64
 
 class VodafoneM2M:
     """
