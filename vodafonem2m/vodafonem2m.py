@@ -90,34 +90,19 @@ class VodafoneM2M:
         return self._send_message('get', '/m2m/v1/{}'.format(self.home))
 
     @staticmethod
-    def _handle_api_response(json_response):
+    def _handle_api_response(response):
         """
         Throw exceptions on errors from API.
 
-        :param json_response:
+        :param response:
         :return:
         """
-
-        if not json_response:
+        if not response:
             raise ValueError('Error getting data from the api, no data returned')
-        if "error" in json_response:
-            raise ValueError("Standard Error:: {} : {}".format(
-                json_response["error"], json_response["error_description"]))
-        elif "description" in json_response:
-            if "Service Error" in json_response['description']:
-                raise ValueError("Service Error:: {} : {}".format(
-                    json_response["id"], json_response["description"]))
-        else:
-            try:
-                codes = json_response[list(json_response.keys())[0]]['return']['returnCode']
-                if codes['majorReturnCode'] != '000' or codes['minorReturnCode'] != '0000':
-                    raise ValueError(
-                        "Return Code Error:: Major: {}, Minor: {}".format(
-                            codes['majorReturnCode'], codes['minorReturnCode'])
-                    )
-            except KeyError:
-                pass
-        return json_response
+
+        response.raise_for_status()
+
+        return response.json()
 
     def _send_message(self, method, endpoint, params=None, headers=None, data=None):
         """
@@ -136,4 +121,4 @@ class VodafoneM2M:
         url = self.url + endpoint
         r = self.session.request(method, url, data=data,
                                  params=params, headers=headers)
-        return self._handle_api_response(r.json())
+        return self._handle_api_response(r)
