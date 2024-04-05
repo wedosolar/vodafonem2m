@@ -63,12 +63,12 @@ class M2MNetwork(VodafoneM2M):
         }
 
         """
-        endpoint = "/m2m/rest/v1/sim"
+        endpoint = "/m2m/rest/v1/network/sim"
         params_data = {
             "simId": sim_id,
             "simIdType": sim_id_type,
             "customerServiceProfile": customer_service_profile,
-            "State": state
+            "state": state
         }
         data = {"setSimDetails": dict((k, v) for k, v in params_data.items() if v is not None)}
         return self._send_message('put', endpoint, data=data)
@@ -123,7 +123,7 @@ class M2MNetwork(VodafoneM2M):
             "simId": sim_id,
             "simIdType": sim_id_type,
             "customerServiceProfile": customer_service_profile,
-            "State": state,
+            "state": state,
             "imei": imei
         }
         data = {"setSimDetailsV2": dict((k, v) for k, v in params_data.items() if v is not None)}
