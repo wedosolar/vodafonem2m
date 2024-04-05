@@ -86,7 +86,7 @@ class VodafoneM2M:
         :return: True if the token is expired, False otherwise.
         """
         # Adjust to dynamically check based on the stored expiration
-        token_expiry = self.token['utc_timestamp'] + timedelta(seconds=self.token['expires_in'])
+        token_expiry = self.token['utc_timestamp'] + timedelta(seconds=int(self.token['expires_in']))
         return datetime.utcnow() > token_expiry
 
     def get_home_document(self):
