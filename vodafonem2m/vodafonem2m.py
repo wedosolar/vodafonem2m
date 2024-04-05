@@ -65,7 +65,7 @@ class VodafoneM2M:
             'cache-control': "no-cache"
         }
         string = "grant_type=client_credentials&client_id={client_id}&client_secret={client_secret}&scope={scope}"
-        data = string.format(client_id=self.__client_id, client_secret=self.__client_secret, scope=self.scope)
+        data = string.format(client_id=self.__client_id, client_secret=self.__client_secret, scope=f"{self.scope}")
         self.token = self._send_message('post', '/m2m/v1/oauth2/access-token', data=data, headers=headers)
         self.token['utc_timestamp'] = datetime.utcnow()
 
@@ -143,6 +143,11 @@ class VodafoneM2M:
             except TypeError:
                 pass
         return json_response
+
+    def testing(self):
+        endpoint = "/m2m/rest/v1/utility/httpPing"
+        params = {"echo": "testing"}
+        return self._send_message('get', endpoint, params=params)
 
     def _send_message(self, method, endpoint, params=None, headers=None, data=None):
         """
